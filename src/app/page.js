@@ -8,7 +8,7 @@ export default function Home() {
   const [selectedMake, setSelectedMake] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);  // Новый флаг загрузки
+  const [loading, setLoading] = useState(true);  
 
   console.log(data && data)
 
@@ -16,22 +16,21 @@ export default function Home() {
     const loadCarMakes = async () => {
       try {
         const result = await fetchCarMakes();
-        setData(result); // Сохраняем данные
+        setData(result); 
       } catch (err) {
         setError('Error fetching data');
       } finally {
-        setLoading(false);  // Загрузка завершена
+        setLoading(false); 
       }
     };
 
     loadCarMakes();
   }, []);
 
-  // Генерация опций для выбора года
+ 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: currentYear - 2015 + 1 }, (_, index) => 2015 + index);
-
-  // Обработчики изменений для марки и года
+  
   const handleMakeChange = (event) => {
     setSelectedMake(event.target.value);
   };
@@ -52,7 +51,7 @@ export default function Home() {
             className="p-2 border rounded w-full box-border" 
             value={selectedMake} 
             onChange={handleMakeChange}
-            disabled={loading} // Отключаем селектор, пока идет загрузка
+            disabled={loading} 
           >
             <option value="" disabled>Select Make</option>
             {data ? (
@@ -62,7 +61,7 @@ export default function Home() {
                 </option>
               ))
             ) : (
-              <option>Loading...</option> // Показать сообщение, пока данные не загружены
+              <option>Loading...</option> 
             )}
           </select>
         </div>
@@ -84,8 +83,7 @@ export default function Home() {
           </select>
         </div>
       </div>
-
-      {/* Кнопка Next */}
+      
       <Link 
         href={selectedMake && selectedYear ? `pages/result/${selectedMake}/${selectedYear}` : '#'} 
         className={`mt-20 ${selectedMake && selectedYear ? 'bg-blue-500' : 'bg-gray-500'} text-white py-2 px-6 rounded-lg`} 

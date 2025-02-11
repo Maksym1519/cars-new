@@ -4,14 +4,12 @@ import { useEffect, useState, Suspense } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
-// Функция для получения данных моделей
 const fetchModelsForMakeAndYear = async (makeId, year) => {
   const response = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeIdYear/makeId/${makeId}/modelyear/${year}?format=json`);
   const data = await response.json();
-  return data.Results || [];  // Возвращаем данные моделей или пустой массив.
+  return data.Results || [];  
 };
 
-// Компонент, который будет асинхронно загружать данные
 const ModelsList = ({ makeId, year }) => {
   const [models, setModels] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,18 +19,18 @@ const ModelsList = ({ makeId, year }) => {
     if (makeId && year) {
       const fetchModels = async () => {
         try {
-          setLoading(true);  // Начинаем загрузку
-          const result = await fetchModelsForMakeAndYear(makeId, year);  // Получаем модели
-          setModels(result);  // Обновляем состояние с моделями
+          setLoading(true);  
+          const result = await fetchModelsForMakeAndYear(makeId, year);  
+          setModels(result);  
         } catch (err) {
-          setError('Error fetching data');  // Обрабатываем ошибки
+          setError('Error fetching data');  
         } finally {
-          setLoading(false);  // Завершаем загрузку
+          setLoading(false);  
         }
       };
-      fetchModels();  // Вызываем функцию для получения данных
+      fetchModels();  
     }
-  }, [makeId, year]);  // Повторяем запрос при изменении makeId или year
+  }, [makeId, year]);  
 
   if (loading) return <div className="text-center">Loading models...</div>;
   if (error) return <div className="text-center text-red-500">{error}</div>;
@@ -55,13 +53,12 @@ const ModelsList = ({ makeId, year }) => {
 };
 
 const ResultPage = () => {
-  const { makeId, year } = useParams();  // Получаем параметры из URL
+  const { makeId, year } = useParams();  
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-100">
       <h1 className="text-4xl font-bold text-center mb-8">Results for {makeId} - {year}</h1>
-
-      {/* Оборачиваем ModelsList в Suspense */}
+      
       <Suspense fallback={<div className="text-center">Loading...</div>}>
         <ModelsList makeId={makeId} year={year} />
       </Suspense>
@@ -78,5 +75,4 @@ const ResultPage = () => {
   );
 };
 
-// Экспорт компонента как default
 export default ResultPage;
